@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Green Spot</string>
+    <string name="button1_text">Stránka 1</string>
+    <string name="button2_text">Stránka 2</string>
+    <string name="button3_text">Stránka 3</string>
+    <string name="button4_text">Stránka 4</string>
 </resources>

@@ -34,7 +34,7 @@ class SplashActivity : ComponentActivity() {
 
         setContent {
             GreenSpotTheme {
-                // Nastavení bílého pozadí
+
                 Surface(modifier = Modifier.fillMaxSize(), color = Color.White) {
                     SplashScreen()
                 }
@@ -50,7 +50,7 @@ fun SplashScreen() {
         contentAlignment = Alignment.Center
     ) {
         Image(
-            painter = painterResource(id = R.drawable.greenspot), // Obrázek z drawable
+            painter = painterResource(id = R.drawable.greenspot),
             contentDescription = "Splash screen logo"
         )
     }
@@ -60,7 +60,7 @@ fun SplashScreen() {
 @Composable
 fun SplashScreenPreview() {
     GreenSpotTheme {
-        Surface(color = Color.White) { // Přidáno bílé pozadí i v náhledu
+        Surface(color = Color.White) {
             SplashScreen()
         }
     }
