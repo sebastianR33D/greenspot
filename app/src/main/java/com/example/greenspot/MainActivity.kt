@@ -4,26 +4,31 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp  // Import správné jednotky dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.ui.theme.GreenSpotTheme
 
 class MainActivity : ComponentActivity() {
+    private val mainViewModel: MainViewModel by viewModels()  // Inicializace ViewModelu
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             GreenSpotTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MainMenu(
+                val navController = rememberNavController()  // Inicializace NavControlleru
+                Scaffold { innerPadding ->
+                    NavigationHost(
+                        navController = navController,
+                        viewModel = mainViewModel,  // Předání ViewModelu
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -33,39 +38,26 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainMenu(modifier: Modifier = Modifier) {
-    Column(modifier = modifier.fillMaxSize()) {
-        Button(
-            onClick = { /* TODO: Navigate to Screen 1 */ },
-            modifier = Modifier.padding(16.dp)  // Použití dp pro padding
-        ) {
-            Text(text = "Stránka 1")
+fun NavigationHost(navController: NavHostController, viewModel: MainViewModel, modifier: Modifier = Modifier) {
+    NavHost(
+        navController = navController,
+        startDestination = "home",  // Výchozí obrazovka (Home)
+        modifier = modifier
+    ) {
+        composable("home") {
+            HomeScreen(navController = navController, viewModel = viewModel)  // Předání ViewModelu
         }
-        Button(
-            onClick = { /* TODO: Navigate to Screen 2 */ },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(text = "Stránka 2")
+        composable("screen1") {
+            Screen1()
         }
-        Button(
-            onClick = { /* TODO: Navigate to Screen 3 */ },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(text = "Stránka 3")
+        composable("screen2") {
+            Screen2()
         }
-        Button(
-            onClick = { /* TODO: Navigate to Screen 4 */ },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(text = "Stránka 4")
+        composable("screen3") {
+            Screen3()
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainMenuPreview() {
-    GreenSpotTheme {
-        MainMenu()
+        composable("screen4") {
+            Screen4()
+        }
     }
 }
