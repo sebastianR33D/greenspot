@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kapt) // Pro podporu Room kompilace
 }
 
 android {
@@ -60,4 +61,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.navigation.compose)
+    // Retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.gson) // Retrofit s Gson konvertorem
+    // Gson pro zpracování JSON dat
+    implementation(libs.gson)
+    // Coroutines pro asynchronní operace
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
+    // Room dependencies
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+
 }

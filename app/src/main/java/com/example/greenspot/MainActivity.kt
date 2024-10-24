@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,7 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.ui.theme.GreenSpotTheme
 
 class MainActivity : ComponentActivity() {
-    private val mainViewModel: MainViewModel by viewModels()  // Inicializace ViewModelu
+    private val mainViewModel: NavigationViewModel by viewModels()  // Inicializace ViewModelu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +37,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NavigationHost(navController: NavHostController, viewModel: MainViewModel, modifier: Modifier = Modifier) {
+fun NavigationHost(navController: NavHostController, viewModel: NavigationViewModel, modifier: Modifier = Modifier) {
     NavHost(
         navController = navController,
         startDestination = "home",  // Výchozí obrazovka (Home)
