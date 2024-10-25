@@ -7,11 +7,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 // Datové třídy odpovídající JSON struktuře
 data class HourData(
     val hour: Int,
-    val priceEur: Double,
     val priceCZK: Double,
     val level: String,
-    val levelNum: Int
+    val levelNum: Int,
 )
+
 
 data class PriceResponse(
     val hoursToday: List<HourData>,

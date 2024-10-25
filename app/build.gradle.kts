@@ -2,7 +2,10 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.kapt) // Pro podporu Room kompilace
+    id("kotlin-kapt")
+
+
+    
 }
 
 android {
@@ -69,8 +72,10 @@ dependencies {
     // Coroutines pro asynchronní operace
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
-    // Room dependencies
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
+
+    // Room database
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
 }

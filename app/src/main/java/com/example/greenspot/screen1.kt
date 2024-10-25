@@ -13,10 +13,17 @@ import com.example.greenspot.api.HourData
 import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.background
 import androidx.compose.ui.text.style.TextAlign
+import com.example.greenspot.database.HourDataRepository
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.CoroutineScope
+import androidx.compose.runtime.rememberCoroutineScope
+
 
 @Composable
-fun Screen1(apiViewModel: ApiViewModel = viewModel()) {
+fun Screen1(apiViewModel: ApiViewModel = viewModel(), hourDataRepository: HourDataRepository) {
     val scrollState = rememberScrollState()
+    val coroutineScope = rememberCoroutineScope() // Přidání coroutine scope
+    val hoursToday = apiViewModel.hoursToday.collectAsState().value // Získáme hodnotu mimo korutinu
 
     Column(
         modifier = Modifier
@@ -28,14 +35,33 @@ fun Screen1(apiViewModel: ApiViewModel = viewModel()) {
         Spacer(modifier = Modifier.height(16.dp))
 
         // Dnešní ceny
-        ExpandablePriceSection("Dnešní ceny", prices = apiViewModel.hoursToday.collectAsState().value)
+        ExpandablePriceSection("Dnešní ceny", prices = hoursToday)
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Zítřejší ceny
         ExpandablePriceSection("Zítřejší ceny", prices = apiViewModel.hoursTomorrow.collectAsState().value)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Tlačítko pro uložení dat
+        Button(
+            onClick = {
+                // Použití coroutine scope pro spuštění asynchronní operace při kliknutí na tlačítko
+                coroutineScope.launch {
+                    hourDataRepository.saveHourData(hoursToday) // Použijeme hodnotu mimo composable
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Uložit data")
+        }
     }
 }
+
+
+
+
 
 @Composable
 fun ExpandablePriceSection(title: String, prices: List<HourData>) {

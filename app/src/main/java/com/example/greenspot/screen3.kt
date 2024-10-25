@@ -13,6 +13,6 @@ fun Screen3() {
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        Text(text = "Toto je stránka 1")
+
     }
 }

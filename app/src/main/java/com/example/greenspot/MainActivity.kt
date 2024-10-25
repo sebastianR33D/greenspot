@@ -14,6 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.greenspot.ui.theme.GreenSpotTheme
+import com.example.greenspot.database.HourDataRepository
+import com.example.greenspot.database.MyRoomDatabase
 
 class MainActivity : ComponentActivity() {
     private val mainViewModel: NavigationViewModel by viewModels()  // Inicializace ViewModelu
@@ -21,6 +23,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        // Inicializace Room databáze a HourDataRepository
+        val database = MyRoomDatabase.getDatabase(this)
+        val hourDataRepository = HourDataRepository(database.hourDataDao())
+
         setContent {
             GreenSpotTheme {
                 val navController = rememberNavController()  // Inicializace NavControlleru
@@ -28,6 +35,7 @@ class MainActivity : ComponentActivity() {
                     NavigationHost(
                         navController = navController,
                         viewModel = mainViewModel,  // Předání ViewModelu
+                        hourDataRepository = hourDataRepository,  // Předání HourDataRepository
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -37,7 +45,12 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun NavigationHost(navController: NavHostController, viewModel: NavigationViewModel, modifier: Modifier = Modifier) {
+fun NavigationHost(
+    navController: NavHostController,
+    viewModel: NavigationViewModel,
+    hourDataRepository: HourDataRepository,  // Předání HourDataRepository jako parametru
+    modifier: Modifier = Modifier
+) {
     NavHost(
         navController = navController,
         startDestination = "home",  // Výchozí obrazovka (Home)
@@ -47,10 +60,10 @@ fun NavigationHost(navController: NavHostController, viewModel: NavigationViewMo
             HomeScreen(navController = navController, viewModel = viewModel)  // Předání ViewModelu
         }
         composable("screen1") {
-            Screen1()
+            Screen1(hourDataRepository = hourDataRepository)  // Předání HourDataRepository do Screen1
         }
         composable("screen2") {
-            Screen2()
+            Screen2(hourDataRepository = hourDataRepository)  // Předání HourDataRepository do Screen2
         }
         composable("screen3") {
             Screen3()
