@@ -15,15 +15,19 @@ import androidx.compose.foundation.background
 import androidx.compose.ui.text.style.TextAlign
 import com.example.greenspot.database.HourDataRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.CoroutineScope
 import androidx.compose.runtime.rememberCoroutineScope
-
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 
 @Composable
 fun Screen1(apiViewModel: ApiViewModel = viewModel(), hourDataRepository: HourDataRepository) {
     val scrollState = rememberScrollState()
     val coroutineScope = rememberCoroutineScope() // Přidání coroutine scope
     val hoursToday = apiViewModel.hoursToday.collectAsState().value // Získáme hodnotu mimo korutinu
+
+    // Přidání stavu pro zobrazení Snackbaru
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Column(
         modifier = Modifier
@@ -50,16 +54,26 @@ fun Screen1(apiViewModel: ApiViewModel = viewModel(), hourDataRepository: HourDa
                 // Použití coroutine scope pro spuštění asynchronní operace při kliknutí na tlačítko
                 coroutineScope.launch {
                     hourDataRepository.saveHourData(hoursToday) // Použijeme hodnotu mimo composable
+                    // Zobrazí Snackbar po úspěšném uložení dat
+                    val result = snackbarHostState.showSnackbar(
+                        message = "Data úspěšně uložena!",
+                        actionLabel = "OK"
+                    )
+
+                    if (result == SnackbarResult.ActionPerformed) {
+                        // Možná akce, pokud uživatel klikne na "OK" (např. zavřít Snackbar)
+                    }
                 }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Uložit data")
         }
+
+        // Zobrazení Snackbaru
+        SnackbarHost(hostState = snackbarHostState)
     }
 }
-
-
 
 
 
